@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.ClazzMapper">
+
+    <select id="selectPage" resultType="org.example.pojo.Clazz">
+        select id,name,room,begin_date,end_date,master_id,subject,create_time,update_time
+        from clazz
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="begin != null and begin != ''">
+                end_date &gt;= #{begin}
+            </if>
+            <if test="end != null and end != ''">
+                end_date &lt;= #{end}
+            </if>
+        </where>
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        select count(*) from clazz
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="begin != null and begin != ''">
+                end_date &gt;= #{begin}
+            </if>
+            <if test="end != null and end != ''">
+                end_date &lt;= #{end}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="org.example.pojo.Clazz">
+        select id,name,room,begin_date,end_date,master_id,subject,create_time,update_time
+        from clazz where id=#{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into clazz(name,room,begin_date,end_date,master_id,subject,create_time,update_time)
+        values(#{name},#{room},#{beginDate},#{endDate},#{masterId},#{subject},now(),now())
+    </insert>
+
+    <update id="update">
+        update clazz set
+        name=#{name},
+        room=#{room},
+        begin_date=#{beginDate},
+        end_date=#{endDate},
+        master_id=#{masterId},
+        subject=#{subject},
+        update_time=now()
+        where id=#{id}
+    </update>
+
+    <delete id="delete">
+        delete from clazz where id=#{id}
+    </delete>
+
+    <select id="selectAll" resultType="org.example.pojo.Clazz">
+        select id,name,room,begin_date,end_date,master_id,subject,create_time,update_time
+        from clazz
+    </select>
+</mapper>
